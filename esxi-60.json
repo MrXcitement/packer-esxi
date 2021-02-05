@@ -1,0 +1,71 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<enter><wait>O<wait> ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter>"
+      ],
+      "boot_wait": "5s",
+      "disk_size": "{{ user `disk_size` }}",
+      "disk_type_id": 4,
+      "guest_os_type": "{{ user `guest_os_type` }}",
+      "headless": false,
+      "http_directory": "http",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{user `iso_checksum`}}",
+      "iso_url": "{{user `iso_file`}}",
+      "name": "vmware-esxi",
+      "shutdown_command": "esxcli system maintenanceMode set -e true -t 0 ; esxcli system shutdown poweroff -d 10 -r 'Packer Shutdown' ; esxcli system maintenanceMode set -e false -t 0",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_timeout": "60m",
+      "ssh_username": "root",
+      "type": "vmware-iso",
+      "vm_name": "vmware-esxi",
+      "vmdk_name": "vmware-esxi-disk0",
+      "vmx_data": {
+        "ethernet0.virtualDev": "vmxnet3",
+        "memsize": "4096",
+        "numvcpus": "2",
+        "vhv.enable": "TRUE"
+      }
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "compression_level": 9,
+        "output": "build/{{ user `box_name` }}-{{user `box_version`}}-{{.Provider}}.box",
+        "type": "vagrant",
+        "vagrantfile_template": "script/vagrantfile_template.rb"
+      }
+    ]
+  ],
+  "provisioners": [
+    {
+      "destination": "/etc/ssh/keys-root/authorized_keys",
+      "source": "script/vagrant.pub",
+      "type": "file"
+    },
+    {
+      "destination": "/etc/rc.local.d/local.sh",
+      "source": "script/esxi-vnic-fix.sh",
+      "type": "file"
+    },
+    {
+      "scripts": [
+        "script/esxi-install-esxi-embedded-host-client.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "box_name": "esxi",
+    "box_version": "6.0.0-2494585",
+    "disk_size": "40960",
+    "guest_os_type": "vmkernel6",
+    "iso_checksum": "478e2c6f7a875dd3dacaaeb2b0b38228",
+    "iso_checksum_type": "md5",
+    "iso_file": "iso/VMware-VMvisor-Installer-{{ user `box_version` }}.x86_64.iso",
+    "name": "vmware-esxi",
+    "ssh_password": "vagrant"
+  }
+}
+
