@@ -63,9 +63,9 @@
     "guest_os_type": "vmkernel6",
     "iso_checksum": "478e2c6f7a875dd3dacaaeb2b0b38228",
     "iso_checksum_type": "md5",
-    "iso_file": "iso/VMware-VMvisor-Installer-{{ user `box_version` }}.x86_64.iso",
+    "iso_file": "iso/VMware-VMvisor-Installer-6.0.0-2494585.x86_64.iso",
     "name": "vmware-esxi",
-    "ssh_password": "vagrant"
+    "ssh_password": "Vagrant1!"
   }
 }
 
