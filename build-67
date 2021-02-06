@@ -1,0 +1,8 @@
+#!/bin/sh
+
+packer build \
+       -var 'box_version=6.7.0-8169922' \
+       -var 'guest_os_type=vmkernel65' \
+       -var 'iso_checksum=bd218f0f26510e690695116d8628e4af' \
+       -var 'iso_file=iso/VMware-VMvisor-Installer-6.7.0-8169922.x86_64.iso' \
+       "$@" esxi-60.json
