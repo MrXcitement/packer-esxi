@@ -1,0 +1,8 @@
+#!/bin/sh
+
+packer build \
+       -var 'box_version=7.0.0-15843807' \
+       -var 'guest_os_type=vmkernel7' \
+       -var 'iso_checksum=220d2e87290f50c3508214cadf66b737' \
+       -var 'iso_file=iso/VMware-VMvisor-Installer-7.0.0-15843807.x86_64.iso' \
+       "$@" esxi-70.json
